@@ -1,0 +1,86 @@
+{
+	"pages": [
+		{
+		    "path" : "pages/switchPages/index",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "GraceUI",
+		        "navigationStyle" : "custom"
+		    }
+		}
+        ,{
+            "path" : "pages/switchPages/about",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "GraceUI · 关于",
+				"navigationStyle" : "custom"
+            }
+        }
+        ,{
+            "path" : "pages/login/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "登录页面",
+                "enablePullDownRefresh": false,
+				"navigationStyle" : "custom"
+            }
+        },
+		{
+			"path" : "pages/staff_management/staff_management",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "员工信息",
+			    "enablePullDownRefresh": false,
+				"navigationStyle" : "custom"
+			}
+		}
+        ,{
+            "path" : "pages/product_management/product_management",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "产品管理",
+                "enablePullDownRefresh": false,
+				"navigationStyle" : "custom"
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"rpxCalcMaxDeviceWidth": 0,
+		"rpxCalcBaseDeviceWidth": 375,  // rpx 计算使用的基准设备宽度，设备实际宽度超出 rpx 计算所支持的最大设备宽度时将按基准宽度计算，单位 px，默认值为 375
+		"rpxCalcIncludeWidth": 750,  // rpx 计算特殊处理的值，始终按实际的设备宽度计算，单位 rpx，默认值为 750
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "GraceUI",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF",
+		// "enablePullDownRefresh": true,
+		"pageOrientation": "auto"
+	},
+	// "tabBar": {
+	// 	"color": "#B6C3D2",
+	// 	"selectedColor": "#2B2E3D",
+	// 	"borderStyle": "black",
+	// 	"backgroundColor": "#F8F8F8",
+	// 	"list": [
+	// 		{
+	// 			"pagePath": "pages/switchPages/index",
+	// 			"iconPath": "static/menu_imgs/menu_1.png",
+	// 			"selectedIconPath": "static/menu_imgs/menu_1a.png",
+	// 			"text": "首页"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/switchPages/about",
+	// 			"iconPath": "static/menu_imgs/menu_2.png",
+	// 			"selectedIconPath": "static/menu_imgs/menu_2a.png",
+	// 			"text": "关于"
+	// 		}
+	// 	]
+	// },
+	"easycom": {
+		"autoscan" : true,
+		"custom": {
+			"gui-(.*)" : "@/Grace6/components/gui-$1.vue",
+			"^qiun-(.*)": "@/uni_modules/qiun-data-charts/components/qiun-$1/qiun-$1.vue"
+		}
+	}
+}
