@@ -102,9 +102,6 @@
             <text class="gui-td gui-primary-text gui-text-center gui-border-r gui-border-b" style="flex: 0.4">{{item.username}}</text>
             <text class="gui-td gui-primary-text gui-text-center gui-border-r gui-border-b" style="flex: 0.4">{{item.department}}</text>
             <text class="gui-td gui-primary-text gui-text-center gui-border-r gui-border-b" style="flex: 0.25">
-              <!--              <gui-tags-->
-              <!--                  :text="item.gender" borderColor="#1E88E5" padding="5" :margin="0"-->
-              <!--                  :size="22"></gui-tags>-->
               <text class="sex"
                     :style="{background: item.gender === '男'? 'rgba(30, 136, 229, .4)' : 'rgba(255, 182, 193, .4)',
                     borderColor: item.gender === '男'? '#1E88E5' : '#FFB6C1',
@@ -119,7 +116,7 @@
                 {{item.status}}
               </text>
             </text>
-            <text class="gui-td gui-primary-text gui-text-center gui-border-r gui-border-b" style="flex: 1">{{item.creationtime}}</text>
+            <text class="gui-td gui-primary-text gui-text-center gui-border-r gui-border-b" style="flex: 1">{{item.createTime}}</text>
           </view>
         </checkbox-group>
       </view>
@@ -134,28 +131,21 @@ const gender = reactive({
   arr: ['请选择状态', '已激活', '禁用'],
 });
 const students = reactive({
-  arr: [
-    {id:1, name: '张三', username:'001', gender: '男', department: '技术部', status: '已激活', creationtime: '2011-11-30 09:46:03'},
-    {id:2, name: '小红', username:'001', gender: '女', department: '运营部', status: '禁用', creationtime: '2011-11-30 09:46:03'},
-    {id:2, name: '李四', username:'001', gender: '女', department: '采购部', status: '已激活', creationtime: '2011-11-30 09:46:03'},
-    {id:2, name: '华佗', username:'001', gender: '男', department: '采购部', status: '已激活', creationtime: '2011-11-30 09:46:03'},
-    {id:2, name: '孙思邈', username:'001', gender: '男', department: '采购部', status: '已激活', creationtime: '2011-11-30 09:46:03'},
-    {id:2, name: '孙尚香', username:'001', gender: '女', department: '运营部', status: '已激活', creationtime: '2011-11-30 09:46:03'},
-  ]
+  arr: []
 })
-let genderIndex = ref<number>(0)
-let user = ref<string>('')
-let username = ref<string>('')
-let option = ref<any>()
+const genderIndex = ref<number>(0)
+const user = ref<string>('')
+const username = ref<string>('')
+const option = ref<any>()
 
 onLoad((option) => {
-  console.log()
-  let arr1 = decodeURIComponent(option.formData)
-  if(arr1 !== '{}'){
-    arr1.id = 1
-    arr1.creationtime = '2011-11-30 09:46:03'
-    students.arr.push(arr1)
-  }
+})
+onShow(() => {
+  console.log(1)
+  let arr1 = uni.getStorageSync('staff')
+  students.arr = arr1
+
+  console.log(students.arr)
 })
 
 const pickerChange = (e:any) => {
@@ -165,22 +155,10 @@ const pickerChange = (e:any) => {
 }
 let add = () => {
   uni.navigateTo({
-    url:"../../pages/adduser/adduser",
+    url:"/pages/staff_management/add_staff"
   })
   console.log(1)
 }
-// const uniqueById = (arr:any[]) => {
-// const map = new Map();
-//   arr.forEach(item => {
-//     if(!map.has(item.id)){
-//       map.set(item.id, item);
-//     }
-//   })
-//   return [...map.values()];
-// }
-// students.arr = uniqueById(students.arr);
-
-
 </script>
 
 <style lang="scss">
@@ -208,7 +186,6 @@ let add = () => {
     input{
       border: 1px solid #1E88E5;
       padding: 6rpx 20rpx;
-      color: white;
       width: 160rpx;
     }
     .gui-form-body{

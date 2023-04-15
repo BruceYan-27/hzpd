@@ -5,7 +5,7 @@
 			// #ifdef APP-PLUS
 			// plus.screen.lockOrientation('portrait-primary');
 			const dom = weex.requireModule('dom');
-			dom.addRule('fontFace', { 
+			dom.addRule('fontFace', {
 				'fontFamily': "graceIconfont",
 				'src': "url('/static/font/grace.ttf')"
 			});
@@ -36,8 +36,11 @@
 @font-face{
 	font-family : "my-icons";
 	font-weight : normal;
-	font-style  : normal; 
+	font-style  : normal;
 	src         : url('@/static/font/iconfont.ttf') format('truetype');
 }
 .my-icons{font-family:"my-icons"; font-style:normal;}
+.gui-header {
+  width: 100% !important;
+}
 </style>

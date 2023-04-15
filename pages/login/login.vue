@@ -21,7 +21,7 @@
 						</view>
 					</view>
 				</view>
-				
+
 				<view class="gui-margin-top gui-flex gui-row gui-nowrap gui-justify-content-end gui-padding-x">
 					<button type="default" class="gui-button gui-bg-primary gui-noborder" style="width:168rpx;" formType="submit">
 						<text class="gui-color-white gui-button-text">提交</text>
@@ -68,6 +68,7 @@ page{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+  background-color: #0088f8;
 	&-box{
 		width: 800rpx;
 		height: 560rpx;

@@ -1,9 +1,9 @@
 <template>
 	<gui-page :customHeader="true">
-		<!-- <template v-slot:gHeader>
-			<view style="height:20px;"></view>
-		</template> -->
-		<!-- 请开始您的开发 ~ -->
+<!--		<template v-slot:gHeader>-->
+<!--			<view style="height:20px;"></view>-->
+<!--		</template>-->
+			<!-- 请开始您的开发 ~ -->
 		<template v-slot:gBody>
 			<view class="container">
 				<view class="container-left">
@@ -19,17 +19,17 @@
 							<text class="my-icons">&#xe60e;</text>
 							<text class="my-icons">&#xe62f;</text>
 							<view class="container-right-title-username" @tap="login">
-								<image class="gui-list-image ucenter-face-image" 
-									src="https://images.unsplash.com/photo-1662695094714-966fc339a2e8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNnx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" 
+								<image class="gui-list-image ucenter-face-image"
+									src="https://images.unsplash.com/photo-1662695094714-966fc339a2e8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNnx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
 									mode="aspectFill"></image>
 								<text>用户名</text>
 							</view>
 						</view>
 					</view>
-					
+
 					<view class="container-right-body">
 						<view class="charts-box" style="flex: 6;background-color: white;">
-							 <qiun-data-charts 
+							 <qiun-data-charts
 							      type="bar"
 							      :opts="list.opts"
 							      :chartData="list.chartData"
@@ -37,7 +37,7 @@
 						</view>
 						<view class="charts-box note-order" style="flex: 4;">
 							<!-- 注意事项 -->
-							<view class="note" style="background-color: white;padding: 30rpx 0 60rpx 0;border-radius: 20rpx;">
+							<view class="note" style="background-color: white;padding: 20rpx 0 30rpx 0;border-radius: 20rpx;">
 								<view class="note-title">
 									注意事项
 								</view>
@@ -65,7 +65,7 @@
 								</view>
 							</view>
 							<!-- 订单查询 -->
-							<view class="order" style="background-color: white;padding: 30rpx 0 60rpx 0;border-radius: 20rpx;">
+							<view class="order" style="background-color: white;padding: 20rpx 0 30rpx 0;border-radius: 20rpx;">
 								<view class="order-title">
 									订单查询
 								</view>
@@ -80,11 +80,11 @@
 							</view>
 						</view>
 					</view>
-					
+
 					<view class="container-right-footer">
 						<view class="charts-box" style="flex: 4;">
 							<view class="charts-box" style="flex: 6;background-color: white;">
-								 <qiun-data-charts 
+								 <qiun-data-charts
 								      type="mix"
 								      :opts="list.opts1"
 								      :chartData="list.chartData1"
@@ -92,8 +92,10 @@
 							</view>
 						</view>
 						<view class="charts-box charts-box-list" style="flex: 6;">
-							<view class="charts-box-list-item">
-								<qiun-data-charts type="arcbar" :opts="list.opts2" :chartData="list.chartData2" />
+							<view class="charts-box-list-item" style="display: flex;justify-content: center;align-items: center">
+                <view style="width: 360rpx;height: 340rpx;">
+                  <qiun-data-charts type="arcbar" :opts="list.opts2" :chartData="list.chartData2" />
+                </view>
 							</view>
 							<view class="charts-box-list-item">
 								<view class="charts-box-list-item-title" style="padding: 20rpx;">
@@ -112,16 +114,22 @@
 	</gui-page>
 </template>
 <script setup>
-	import { onShow, onUnload, onReady } from '@dcloudio/uni-app'
+	import { onShow, onUnload, onReady, onLoad } from '@dcloudio/uni-app'
 	import {reactive} from 'vue'
-	
+  // 获取pinia的本地存储
+  import { useProductAttributesStore } from '@/store/modules/product_attributes'
+
+  const store = useProductAttributesStore()
+
+  console.log(store.getAttributes)
+
 	const list = reactive({
 		menu:[
 			{name: '首页', icon: '&#xe600;', route: '/'},
 			{name: '个人信息', icon: '&#xe635;'},
 			{name: '员工管理', icon: '&#xe64d;', route: '/pages/staff_management/staff_management'},
 			{name: '产品管理', icon: '&#xe60a;', route: '/pages/product_management/product_management'},
-			{name: '财务管理', icon: '&#xe64a;'},
+			{name: '产品属性管理', icon: '&#xe64a;', route: '/pages/product_attributes/product_attributes'},
 			{name: '财务管理', icon: '&#xe64a;'},
 			{name: '数据统计', icon: '&#xe63e;'},
 			{name: '设置', icon: '&#xe615;'},
@@ -202,7 +210,7 @@
 		          color: "#2fc25b"
 		        },
 		        subtitle: {
-		          name: "正确率",
+		          name: "开单率",
 		          fontSize: 25,
 		          color: "#666666"
 		        },
@@ -218,12 +226,13 @@
 		        }
 		      }
 	})
-	
+
 	onReady(() => {
 		getServerData()
 		getServerData1()
 		getServerData2()
 	})
+
 	const getServerData = () => {
 		//模拟从服务器获取数据时的延时
 		setTimeout(() => {
@@ -248,7 +257,7 @@
 		},500)
 		console.log(list.chartData)
 	}
-	
+
 	const getServerData1 = () => {
 	      //模拟从服务器获取数据时的延时
 	      setTimeout(() => {
@@ -287,13 +296,13 @@
 				list.chartData2 = JSON.parse(JSON.stringify(res));
 			}, 500);
 		}
-		
+
 		const login = () => {
 			uni.reLaunch({
 				url: '/pages/login/login'
 			})
 		}
-		
+
 		const route = (item) => {
 			console.log(item)
 			if(item === undefined){
@@ -308,14 +317,18 @@
 			uni.navigateTo({
 				url:item,
 			})
-			
+
 		}
-		
+
 </script>
 <style scoped lang="scss">
 	/* page{
 		background-color: #0088f8;
 	} */
+  page{
+    background-color: #EEEFF8;
+    overflow: hidden;
+  }
 	.charts-box-list-item-goods{
 		display: flex;
 		flex-direction: column;
@@ -324,8 +337,7 @@
 	}
 	.container{
 		width: 100%;
-		height: calc(100vh - 20px);
-		background-color: aqua;
+   height: calc(100vh - 60rpx);
 		display: flex;
 		overflow: hidden;
 		&-left{
@@ -375,9 +387,9 @@
 					margin-right: 20rpx;
 					margin-left: 20rpx;
 				}
-			}		
+			}
 			&-body{
-				height: 650rpx;
+				height: 600rpx;
 				// background-color: #0088f8;
 				margin-top: 50rpx;
 				display: flex;
@@ -390,7 +402,7 @@
 				}
 				.charts-box{
 					// background-color: white;
-					
+
 					border-radius: 20rpx;
 					.note{
 						display: flex;
@@ -422,7 +434,7 @@
 						font-weight: bold;
 					}
 					.order-input{
-						
+
 						padding: 0 20rpx;
 						input{
 							background-color: #f0f1f6;
@@ -440,14 +452,15 @@
 					margin-right: 50rpx;
 				}
 			}
-			
+
 			&-footer{
-				height: 650rpx;
+				height: 510rpx;
 				// background-color: #0088f8;
 				margin-top: 50rpx;
 				display: flex;
 				justify-content: space-between;
 				padding: 0 50rpx;
+        overflow: hidden;
 				.charts-box{
 					background-color: white;
 					border-radius: 20rpx;
@@ -463,6 +476,7 @@
 						background-color: white;
 						flex: 1;
 						border-radius: 20rpx;
+            overflow: auto;
 					}
 					.charts-box-list-item:nth-child(1){
 						margin-right: 50rpx;

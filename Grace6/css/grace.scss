@@ -88,7 +88,7 @@ page, gui-page{min-height:100%;  display:flex; flex-direction:column; flex:1;}
 /* #endif */
 
 /* 文本修饰 */
-.gui-bold{font-weight:bold;} 
+.gui-bold{font-weight:bold;}
 .gui-line-through{text-decoration:line-through;}
 .gui-underline{text-decoration:underline;}
 .gui-italic{font-style:italic;}
@@ -147,8 +147,8 @@ page, gui-page{min-height:100%;  display:flex; flex-direction:column; flex:1;}
 
 /* 自定义底部导航 */
 .gui-footer{
-	background-color:#F2F2F2; 
-	height:100rpx; 
+	background-color:#F2F2F2;
+	height:100rpx;
 	overflow:hidden;
 }
 /* #ifdef APP-NVUE */
