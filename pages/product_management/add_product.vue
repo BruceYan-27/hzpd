@@ -113,7 +113,7 @@
                                 <text class="addForm-list-item-label gui-secondary-text">{{item}}</text>
                                 <view class="addForm-list-item-body" :style="item === '上市日'? 'flex:' + 1 : ''">
                                     <text v-if="item === '供应商'">最近采购的{{item}}</text>
-                                    <text v-else-if="item === '性别'" style="color: black" @tap="choose_sex">通款</text>
+                                    <text v-else-if="item === '性别'" style="color: black">{{ sex[sexIndex] }}</text>
 <!--                                    <text v-else-if="item === '上市日'" style="color: black">{{ nowDate }}</text>-->
                                     <gui-datetime v-else-if="item === '上市日'" style="flex: 1"
                                         @confirm="confirm"
@@ -149,103 +149,80 @@
 
 
             <!-- 点击颜色或者尺码弹出对应弹窗 -->
-            <view v-if="Product.modal" class="gui-modal">
-                <view class="gui-modal-content">
-                    <view class="gui-modal-header">
-                        <view class="gui-modal-title">
-                            <view @tap="product_back">
-<!--                                <text class="gui-icons gui-color-white">&#xe600;</text>-->
-                                <text style="font-size: 28rpx;margin-right: 30rpx">添加分组</text>
-                            </view>
-                            <text>{{ ProductAttribute[ProductIndex] }}设置</text>
-                        </view>
-                        <view class="gui-modal-close" @tap="addGroups" >
-                            <text>保存</text>
-                        </view>
-                    </view>
-                    <!-- 输入框模糊查询 -->
-                    <view class="gui-input-group">
-                        <view class="gui-input-group-items">
-                            <view class="gui-input-group-body">
-                                <view class="gui-input-group-input">
-                                    <!-- 检索框 自动检索 -->
-                                    <input class="gui-input" type="text" placeholder="输入关键字检索" @input="retrieval" />
-                                </view>
-                            </view>
-                        </view>
-                    </view>
+<!--            <view v-if="Product.modal" class="gui-modal">-->
+<!--                <view class="gui-modal-content">-->
+<!--                    <view class="gui-modal-header">-->
+<!--                        <view class="gui-modal-title">-->
+<!--                            <view @tap="product_back">-->
+<!--&lt;!&ndash;                                <text class="gui-icons gui-color-white">&#xe600;</text>&ndash;&gt;-->
+<!--                                <text style="font-size: 28rpx;margin-right: 30rpx">添加分组</text>-->
+<!--                            </view>-->
+<!--                            <text>{{ ProductAttribute[ProductIndex] }}设置</text>-->
+<!--                        </view>-->
+<!--                        <view class="gui-modal-close" @tap="addGroups" >-->
+<!--                            <text>保存</text>-->
+<!--                        </view>-->
+<!--                    </view>-->
+<!--                    &lt;!&ndash; 输入框模糊查询 &ndash;&gt;-->
+<!--                    <view class="gui-input-group">-->
+<!--                        <view class="gui-input-group-items">-->
+<!--                            <view class="gui-input-group-body">-->
+<!--                                <view class="gui-input-group-input">-->
+<!--                                    &lt;!&ndash; 检索框 自动检索 &ndash;&gt;-->
+<!--                                    <input class="gui-input" type="text" placeholder="输入关键字检索" @input="retrieval" />-->
+<!--                                </view>-->
+<!--                            </view>-->
+<!--                        </view>-->
+<!--                    </view>-->
                     <!-- 颜色尺码分组 ProductIndex==1 ProductIndex==2 展示  -->
-                    <view class="hzpb-list" v-if="ProductIndex === 0 || ProductIndex === 1">
-                        <view  v-for="(item, index) in _ProductAttribute[0]" :key="index">
-                            <view class="hzpb-list-item" style="display: flex;justify-content: space-between">
-                                <text class="hzpb-list-item-text">{{item.name}}</text>
-                                <!-- 字体图标 -->
-                                <view style="padding-right: 28rpx">
-                                    <text @tap="revise(item)" class="hzpb-list-item-icon gui-icons gui-color-orange" style="margin-right: 30rpx;font-size: 36rpx">&#xe69e;</text>
-                                    <text @tap="deleteGroups(item)" class="hzpb-list-item-icon gui-icons gui-color-red" style="font-size: 36rpx">&#xe794;</text>
-                                </view>
-                            </view>
-                            <view class="hzpb-list-tage">
-                                <gui-tags @tapme="tapme(items,indexs)" v-for="(items, indexs) in item.children" :borderColor="'rgba(69, 90, 100, 0.6)'" :key="indexs" :text="items.name" :customClass="[items.default === false ? 'gui-color-gray': 'gui-color-white', items.default === false ? 'gui-transparent-bg': 'gui-bg-primary']"  :size="26"></gui-tags>
-                                <text class="hzpb-list-tage-addTag" @tap="newlyIncreased(item)">新增{{ProductAttribute[ProductIndex]}}</text>
-                            </view>
-                        </view>
-                    </view>
-                    <view v-else class="hzpb-list">
-                        <!-- 提示语 -->
-                        <view class="hzpb-list-item" style="display: flex;align-items: center">
-                            <!--字体图标-->
-                            <text class="hzpb-list-item-icon gui-icons gui-color-orange" style="font-size: 36rpx;margin-right: 20rpx">&#xe645;</text>
-                            <text class="hzpb-list-item-text" style="font-size: 24rpx">【向左滑动】选项可进行删除</text>
-                        </view>
-                        <!-- 实现左滑删除 -->
-                        <scroll-view :scroll-y="true">
-                            <view v-for="(item,index) in _ProductAttribute[0]" :key="index" class="good-item" style="display: flex" :style="{ right: item.right + 'rpx'}" >
-                                <view  class="good-item" @touchstart="startHandle($event,index)" @touchmove="moveHandle($event,index)"
-                                       @touchend="endHandle($event,index)" @click="revise(item)"   >
-                                    <view class="good-info">
-                                        <view class="name">{{item.name}}</view>
-                                    </view>
-                                </view>
-                                <view class="del-btn" @click="deleteGroups(item)">删除</view>
-                            </view>
-                        </scroll-view>
-                    </view>
-                </view>
-            </view>
+<!--                    <view class="hzpb-list" v-if="ProductIndex === 0 || ProductIndex === 1">-->
+<!--                        <view  v-for="(item, index) in _ProductAttribute[0]" :key="index">-->
+<!--                            <view class="hzpb-list-item" style="display: flex;justify-content: space-between">-->
+<!--                                <text class="hzpb-list-item-text">{{item.name}}</text>-->
+<!--                                &lt;!&ndash; 字体图标 &ndash;&gt;-->
+<!--                                <view style="padding-right: 28rpx">-->
+<!--                                    <text @tap="revise(item)" class="hzpb-list-item-icon gui-icons gui-color-orange" style="margin-right: 30rpx;font-size: 36rpx">&#xe69e;</text>-->
+<!--                                    <text @tap="deleteGroups(item)" class="hzpb-list-item-icon gui-icons gui-color-red" style="font-size: 36rpx">&#xe794;</text>-->
+<!--                                </view>-->
+<!--                            </view>-->
+<!--                            <view class="hzpb-list-tage">-->
+<!--                                <gui-tags @tapme="tapme(items,indexs)" v-for="(items, indexs) in item.children" :borderColor="'rgba(69, 90, 100, 0.6)'" :key="indexs" :text="items.name" :customClass="[items.default === false ? 'gui-color-gray': 'gui-color-white', items.default === false ? 'gui-transparent-bg': 'gui-bg-primary']"  :size="26"></gui-tags>-->
+<!--                                <text class="hzpb-list-tage-addTag" @tap="newlyIncreased(item)">新增{{ProductAttribute[ProductIndex]}}</text>-->
+<!--                            </view>-->
+<!--                        </view>-->
+<!--                    </view>-->
+<!--                    <view v-else class="hzpb-list">-->
+<!--                        &lt;!&ndash; 提示语 &ndash;&gt;-->
+<!--                        <view class="hzpb-list-item" style="display: flex;align-items: center">-->
+<!--                            &lt;!&ndash;字体图标&ndash;&gt;-->
+<!--                            <text class="hzpb-list-item-icon gui-icons gui-color-orange" style="font-size: 36rpx;margin-right: 20rpx">&#xe645;</text>-->
+<!--                            <text class="hzpb-list-item-text" style="font-size: 24rpx">【向左滑动】选项可进行删除</text>-->
+<!--                        </view>-->
+<!--                        &lt;!&ndash; 实现左滑删除 &ndash;&gt;-->
+<!--                        <scroll-view :scroll-y="true">-->
+<!--                            <view v-for="(item,index) in _ProductAttribute[0]" :key="index" class="good-item" style="display: flex" :style="{ right: item.right + 'rpx'}" >-->
+<!--                                <view  class="good-item" @touchstart="startHandle($event,index)" @touchmove="moveHandle($event,index)"-->
+<!--                                       @touchend="endHandle($event,index)" @click="revise(item)"   >-->
+<!--                                    <view class="good-info">-->
+<!--                                        <view class="name">{{item.name}}</view>-->
+<!--                                    </view>-->
+<!--                                </view>-->
+<!--                                <view class="del-btn" @click="deleteGroups(item)">删除</view>-->
+<!--                            </view>-->
+<!--                        </scroll-view>-->
+<!--                    </view>-->
+<!--                </view>-->
+<!--            </view>-->
 
-            <!-- 点击addGroups 弹出groups添加框 -->
-            <view v-if="Product.groups" class="gui-groups">
-                <view class="gui-groups-content">
-                    <view class="gui-groups-title">
-                        {{ ProductAttribute[ProductIndex] }}添加/分组
-                    </view>
-                    <view class="gui-groups-body">
-                        <input class="gui-input" v-model="group" type="text" placeholder="颜色分组名称/颜色" />
-                    </view>
-                    <view class="gui-groups-footer">
-                        <view class="gui-modal-button" @tap="Product.groups = false">取消</view>
-                        <view class="gui-modal-button" @tap="submitGroups">确定</view>
-                    </view>
-                </view>
-
-            </view>
-
-            <!-- Click choose_sex to pop up the selection box -->
-            <view class="gui-sex">
-                <view class="gui-sex-list">
-
-                </view>
-            </view>
-
-
-
-
-
-
-
-
-
+            <myl-product-modal :show="Product.modal"
+                               :ProductIndex="ProductIndex"
+                               :data="_ProductAttribute"
+                               :Attribute="ProductAttribute[ProductIndex]"
+                                @update:model-value="retrieval"
+            ></myl-product-modal>
+            <myl-pop1 :show="Product.groups" :Attribute="ProductAttribute[ProductIndex]"
+                      @update:model-value="groups" @on-close="Product.groups = false" @on-submit="submitGroups"></myl-pop1>
+            <myl-pop :data="sex" :show="Product.sex_pop" :width="'30%'" @on-click="sex_s"></myl-pop>
 
         </template>
     </gui-page>
@@ -259,6 +236,9 @@ import {reactive, ref} from "vue";
 import {onLoad} from '@dcloudio/uni-app'
 import {useProductAttributesStore} from '@/store/modules/product_attributes'
 import {useProductStore} from '@/store/modules/product'
+import MylPop from "../../uni_modules/myl-components/components/myl-pop.vue";
+import MylPop1 from "../../uni_modules/myl-components/components/myl-pop1.vue";
+import MylProductModal from "../../uni_modules/myl-components/components/myl-product-modal.vue";
 
 const formData = reactive({
     name: '',
@@ -271,13 +251,23 @@ const formData = reactive({
     images: []
 })
 
+
 // 辅助属性
 const auxiliary_attribute = reactive(['供应商', '品牌', '分类', '单位', '性别', '材质', '款式', '季节', '上市日', '年份'])
-
+const sex = reactive(['通款', '男', '女'])
+let sexIndex = ref(0)
+const sex_s = (index, item) => {
+    console.log(index, item)
+    sexIndex.value = index
+    Product.sex_pop = false
+}
 
 // 记录需要上传的图片数据
 const needPploadedImgs = reactive([])
 const group = ref('')
+const groups = (e) => {
+    group.value = e
+}
 const ProductAttribute = reactive(['颜色', '尺码'])
 // 结构出来
 const store = useProductAttributesStore()
@@ -287,7 +277,8 @@ const ProductIndex = ref(0)
 // 定义 Product.modal
 const Product = reactive({
     modal: false,
-    groups: false
+    groups: false,
+    sex_pop: false
 })
 
 let _date = reactive([])
@@ -419,28 +410,29 @@ const add_color = (index) => {
     Product.modal = true
     addGroupsConfirm()
     // 如果formdata里面的id和_productAttribute二维数组里面子数据id相同default为true
-    if(index === 0){
-        _ProductAttribute[0].map(item => {
-            item.children.map(items => {
-                formData.color.map(itemss => {
-                    if(items.id === itemss.id) {
-                        items.default = true
-                    }
-                })
-            })
-        })
-    }else {
-        _ProductAttribute[0].map(item => {
-            item.children.map(items => {
-                formData.size.map(itemss => {
-                    if(items.id === itemss.id) {
-                        items.default = true
-                    }
-                })
-            })
-        })
-    }
-
+    // if(index === 0){
+    //     _ProductAttribute[0].map(item => {
+    //         item.children.map(items => {
+    //             formData.color.map(itemss => {
+    //                 if(items.id === itemss.id) {
+    //                     items.default = true
+    //                 }
+    //             })
+    //         })
+    //     })
+    //
+    // }else {
+    //     _ProductAttribute[0].map(item => {
+    //         item.children.map(items => {
+    //             formData.size.map(itemss => {
+    //                 if(items.id === itemss.id) {
+    //                     items.default = true
+    //                 }
+    //             })
+    //         })
+    //     })
+    // }
+    console.log(_ProductAttribute[0])
 
 }
 
@@ -610,13 +602,10 @@ const addGroups = () => {
 
 // 选择
 const choose = (item) => {
+    if(item === '性别'){
+        Product.sex_pop = true
+    }
 }
-
-// choose_sex
-const choose_sex = () => {
-    Product.modal = true
-}
-
 
 // 记录选择图片时的待提交数据
 const upload = (e) => {
@@ -706,10 +695,6 @@ const submit = () => {
             uni.hideLoading()
             console.log(formData)
             storeProduct.updateProduct(formData)
-            // 更新商品列表
-            // uni.navigateBack({
-            //     delta: 1
-            // })
             uni.reLaunch({
                 url: '/pages/product_management/product_management'
             })
@@ -938,106 +923,104 @@ page{
 }
 
 // gui-modal
-.gui-modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    //z-index: 998;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.gui-modal-content{
-    width: 80%;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-}
-.gui-modal-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    border-bottom: 1px solid #eee;
-    background: #1E88E5;
-    color: white;
-}
-.gui-modal-title{
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-}
-.gui-modal-close{
-    font-size: 28rpx;
-}
-.gui-modal-footer{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 10px 20px;
-    border-top: 1px solid #eee;
-}
-.gui-modal-button{
-    padding: 10px 20px;
-    color: #007aff;
-    font-size: 16px;
-}
-// 输入框模糊查询
-.gui-input-group{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-}
-.gui-input-group-items{
-    width: 100%;
-}
-.gui-input-group-body{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-}
-.gui-input-group-title{
-    width: 100px;
-    text-align: right;
-    font-size: 14px;
-    color: #333;
-}
-.gui-input-group-input{
-    flex: 1;
-    //margin-left: 10px;
-}
-.gui-input{
-    //width: 100%;
-    height: 40px;
-    padding: 0 10px;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #333;
-}
-.gui-input:focus{
-    border: 1px solid #1E88E5;
-}
-.gui-input-group-button{
-    width: 80px;
-    height: 40px;
-    margin-left: 10px;
-    border: 1px solid #1E88E5;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #1E88E5;
-    background-color: #fff;
-}
-.gui-input-group-button:hover{
-    background-color: #1E88E5;
-    color: #fff;
-}
+//.gui-modal{
+//    position: fixed;
+//    top: 0;
+//    left: 0;
+//    right: 0;
+//    bottom: 0;
+//    background-color: rgba(0,0,0,0.5);
+//    //z-index: 998;
+//    display: flex;
+//    justify-content: center;
+//    align-items: center;
+//}
+//.gui-modal-content{
+//    width: 80%;
+//    background-color: #fff;
+//    border-radius: 10px;
+//    overflow: hidden;
+//}
+//.gui-modal-header{
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//    padding: 10px 20px;
+//    border-bottom: 1px solid #eee;
+//    background: #1E88E5;
+//    color: white;
+//}
+//.gui-modal-title{
+//    font-size: 16px;
+//    font-weight: bold;
+//    display: flex;
+//    align-items: center;
+//}
+//.gui-modal-close{
+//    font-size: 28rpx;
+//}
+//.gui-modal-footer{
+//    display: flex;
+//    justify-content: flex-end;
+//    align-items: center;
+//    padding: 10px 20px;
+//    border-top: 1px solid #eee;
+//}
+//.gui-modal-button{
+//    padding: 10px 20px;
+//    color: #007aff;
+//    font-size: 16px;
+//}
+//// 输入框模糊查询
+//.gui-input-group{
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//    padding: 10px 0;
+//}
+//.gui-input-group-items{
+//    width: 100%;
+//}
+//.gui-input-group-body{
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//    padding: 0 20px;
+//}
+//.gui-input-group-title{
+//    width: 100px;
+//    text-align: right;
+//    font-size: 14px;
+//    color: #333;
+//}
+//.gui-input-group-input{
+//    flex: 1;
+//}
+//.gui-input{
+//    height: 40px;
+//    padding: 0 10px;
+//    border: 1px solid #eee;
+//    border-radius: 5px;
+//    font-size: 14px;
+//    color: #333;
+//}
+//.gui-input:focus{
+//    border: 1px solid #1E88E5;
+//}
+//.gui-input-group-button{
+//    width: 80px;
+//    height: 40px;
+//    margin-left: 10px;
+//    border: 1px solid #1E88E5;
+//    border-radius: 5px;
+//    font-size: 14px;
+//    color: #1E88E5;
+//    background-color: #fff;
+//}
+//.gui-input-group-button:hover{
+//    background-color: #1E88E5;
+//    color: #fff;
+//}
 .hzpb-list-item{
     border-bottom: 1px solid  #eee;
     line-height: 88rpx;
@@ -1054,10 +1037,7 @@ page{
     display: flex;
     justify-content: center;
     align-items: center;
-    //width: 80rpx;
     padding: 14rpx 10rpx;
-    //border: 1px  #eee;
-    // 点线橙色
     border: 1px dashed #ff8000;
     color: #ff8000;
     border-radius: 10rpx;
@@ -1077,46 +1057,6 @@ page{
     min-height: 600rpx;
     overflow: auto;
 }
-
-// gui-groups样式
-.gui-groups{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .gui-groups-content{
-        width: 50%;
-        background-color: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        .gui-groups-title{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 20px;
-            border-bottom: 1px solid #eee;
-            background: #1E88E5;
-            color: white;
-        }
-        .gui-groups-body{
-            padding: 10px 20px;
-        }
-        .gui-groups-footer {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
-            border-top: 1px solid #eee;
-        }
-    }
-}
-
 
 .shangchuan {
     width: 90%;
@@ -1156,4 +1096,5 @@ page{
     }
 }
 .demo{display:block; width:100%; line-height:60rpx; font-size:28rpx; text-align:right;}
+
 </style>
